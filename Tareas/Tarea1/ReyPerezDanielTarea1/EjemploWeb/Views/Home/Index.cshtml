@@ -1,0 +1,202 @@
+﻿@{
+	ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+	<h1 class="display-4">CONSOLA WEB</h1>
+	<p>Aquí programaremos nuestros ejercicios de consola, pero en la web.</p>
+</div>
+
+<p>
+	<!-- INICIO CONSOLA WEB-->
+	<h2>Ejercicio 1: Bucle</h2>
+	Muestro un bucle:
+<p>
+	@{
+		<p>Muestro todas las notas:</p>
+		int sumaNotas = 0;
+		int masAlta = 0, masBaja = 10;
+
+		Random random = new Random();
+		int cantidadNotas = random.Next(0, 11);//Num random entre 0 y 10
+
+		for (int i = 1; i <= cantidadNotas; i++)
+		{
+			int notaRandom = random.Next(0, 11);//Num random entre 0 y 10
+			<p>Examen nº @i, Calificacion: @notaRandom</p>
+
+			sumaNotas += notaRandom;//sumamos las notas para hacer la media
+
+			//comprobamos una por una las notas hasta obtener la mas alta y baja
+			@if (notaRandom > masAlta)
+			{
+				masAlta = notaRandom;
+			}
+
+			@if (notaRandom < masBaja)
+			{
+				masBaja = notaRandom;
+			}
+		}
+
+		@if (cantidadNotas > 0)//Comprobamos que hay notas
+		{
+			double media = (double)sumaNotas / cantidadNotas;
+			<p>Nota media: @media</p>
+			<p>Nota mas alta: @masAlta</p>
+			<p>Nota mas baja: @masBaja</p>
+
+		}
+		else
+		{
+			<p>Nota media: No hay notas</p>
+			<p>Nota mas alta: No hay notas</p>
+			<p>Nota mas baja: No hay notas</p>
+		}
+	}
+</p>
+
+<h2>Ejercicio 2: Array strings</h2>
+<p>
+	@{
+		string[] cadenas = new string[5];//Creamos array
+		<p>Strings aleatorios:</p>
+		<ul>
+			@for (int i = 0; i < cadenas.Length; i++)//Recoremos el array
+			{
+				int longitudCadena = random.Next(5, 16);//entre 5 y 15
+				string cadena = "";
+				@for (int x = 0; x < longitudCadena; x++)
+				{
+					cadena += (char)random.Next('a', 'z' + 1);//generamos letras aleatorias
+				}
+				cadenas[i] = cadena;
+				<li>@cadenas[i]</li>
+			}
+		</ul>
+
+		//Copiar en otra matriz al reves
+		string[] cadenas2 = new string[5];//Creamos array
+		int contador = 0;//creamos un contador para iterar en orden normal
+		<p>Orden inverso:</p>
+		<ul>
+				@for (int i = cadenas.Length - 1; i >= 0; i--)//Bucle que itera en sentido contrario
+				{
+					cadenas2[contador] = cadenas[i];//llenmos el array inverso
+					<li>@cadenas2[contador]</li>
+					contador++;//Actualizamos el contador
+				}
+		</ul>
+	}
+
+</p>
+
+<h2>Ejercicio 3: Numeros Ordenados</h2>
+<p>
+	@{
+		int[] arrayAleatorios = new int[15];//creamos array
+
+		@for (int i = 0; i < arrayAleatorios.Length; i++)//recorremos array
+		{
+			int numRandom = random.Next(0, 100);//Num random entre 0 y 100
+			arrayAleatorios[i] = numRandom;
+		}
+
+		//Ordenamos array
+		Array.Sort(arrayAleatorios);
+
+		@foreach (int aleatorio in arrayAleatorios)//recorremos y mostramos el array
+		{
+			<ul>
+				<li>@aleatorio</li>
+			</ul>
+		}
+	}
+</p>
+
+<h2>Ejercicio 4: Baraja de cartas</h2>
+	@{
+		//metodo void
+		void mostrarBaraja()
+		{
+			string[] palos = { "Bastos", "Copas", "Espadas", "Oro" };
+			@for (int palo = 0; palo <= 3; palo++)//recorremos array palo
+			{
+				<div class="d-flex">
+					@for (int num = 1; num <= 10; num++)//recorremos los numeros
+					{
+						string ruta = "Cartas/" + num + palos[palo] + ".jpg";
+					<img src="@ruta" width="131" height="200" />
+					}
+				</div>
+			}
+		}
+
+		//metodo string
+		void mostrarCarta(string carta)
+		{
+			string[] paloNumero = carta.Split('-');
+			string palo = char.ToUpper(paloNumero[0][0]) + paloNumero[0].Substring(1).ToLower();
+			string numero = "";
+			@switch (paloNumero[1])
+			{
+				case "UNO":
+					numero = "1";
+					break;
+				case "DOS":
+					numero = "2";
+					break;
+				case "TRES":
+					numero = "3";
+					break;
+				case "CUATRO":
+					numero = "4";
+					break;
+				case "CINCO":
+					numero = "5";
+					break;
+				case "SEIS":
+					numero = "6";
+					break;
+				case "SIETE":
+					numero = "7";
+					break;
+				case "SOTA":
+					numero = "8";
+					break;
+				case "CABALLO":
+					numero = "9";
+					break;
+				case "REY":
+					numero = "10";
+					break;
+				default:
+					break;
+			}
+			string ruta = "Cartas/" + numero + palo + ".jpg";
+			<p class="m-2">@numero @palo </p>
+			<img src="@ruta" width="131" height="200" />
+		}
+
+		//metodo
+		void cartaRandom()
+		{
+			int numero = random.Next(0, 11);//Num random entre 0 y 10
+			int palo = random.Next(0, 4);//Num random entre 0 y 3
+			string[] palos = { "Bastos", "Copas", "Espadas", "Oro" };
+
+			string ruta = "Cartas/" + numero + palos[palo] + ".jpg";
+			<p class="m-2">Carta Random: @numero @palos[palo] </p>
+			<img src="@ruta" width="131" height="200" />
+		}
+
+		//Usamos el metodo
+		mostrarBaraja();
+		mostrarCarta("ORO-REY");
+		cartaRandom();
+	}
+
+
+
+<!-- FIN CONSOLA WEB-->
+</p>
